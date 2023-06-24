@@ -6,6 +6,8 @@ namespace MedicalQueueApi.Data {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { 
             //Database.EnsureCreated();
         }
-
+        public DbSet<Page> Pages { get; set; }
+        public DbSet<TypePage> TypePages { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
     }
 }
