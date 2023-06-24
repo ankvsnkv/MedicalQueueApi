@@ -8,5 +8,6 @@ namespace MedicalQueueApi.Data {
         }
         public DbSet<Page> Pages { get; set; }
         public DbSet<TypePage> TypePages { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
     }
 }
