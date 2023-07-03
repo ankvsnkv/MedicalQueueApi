@@ -16,7 +16,6 @@ namespace MedicalQueueApi.Controllers
         private ApplicationContext db;
 
         const string NO_PAGES = "По данному типу страницы нет ни одной записи.";
-        const string AUTH_INVALID = "Такого пользователя в базе данных нет.";
 
         public PagesController(ApplicationContext context) {
             db = context;
