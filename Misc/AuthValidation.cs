@@ -11,11 +11,11 @@ namespace MedicalQueueApi.Misc
         /// <summary>
         /// Функция валидации данных пользователя.
         /// </summary>
-        public static bool isValid(ApplicationContext db, AuthData authData)
+        public static Administrator? getAuth(ApplicationContext db, AuthData authData)
         {
             var login = authData.Login;
             var password = Hasher.Hash(authData.Password);
-            return db.Administrators.Any(x => x.Login == login && x.Password == password);
+            return db.Administrators.FirstOrDefault(x => x.Login == login && x.Password == password);
         }
     }
 }
