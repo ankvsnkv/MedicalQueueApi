@@ -52,7 +52,7 @@ namespace MedicalQueueApi.Controllers
 
         //[Authorize]
         [HttpPut("{id}")]
-        public IActionResult RedactEntry([FromBody] PageRequest request, [FromRoute] long id)
+        public IActionResult RedactEntry([FromBody] PageRequest request, [FromRoute] int id)
         {
             var entry = db.Pages.Include(x => x.TypePage).Include(x => x.Display).FirstOrDefault(x => x.Id == id);
             if (entry == null)
@@ -70,7 +70,7 @@ namespace MedicalQueueApi.Controllers
 
         //[Authorize(Roles = AUTH_ROLE)]
         [HttpDelete("{id}")]
-        public IActionResult DeleteEntry([FromRoute] long id)
+        public IActionResult DeleteEntry([FromRoute] int id)
         {
             var entry = db.Pages.Include(x => x.TypePage).Include(x => x.Display).FirstOrDefault(x => x.Id == id);
             if (entry == null)
@@ -81,7 +81,7 @@ namespace MedicalQueueApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetConcrete([FromRoute] long id)
+        public IActionResult GetConcrete([FromRoute] int id)
         {
             var entry = db.Pages.Include(x => x.TypePage).Include(x => x.Display).FirstOrDefault(x => x.Id == id);
             if (entry == null)
