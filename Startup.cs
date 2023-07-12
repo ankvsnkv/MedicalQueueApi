@@ -27,7 +27,8 @@ namespace MedicalQueueApi {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         override public void ConfigureServices(IServiceCollection services) {
-            services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
+            services.AddDbContext<ApplicationContext>(
+                options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
 
             services.AddCors(o => o.AddPolicy("CorsAllowAny", builder => {
                 builder.AllowAnyOrigin()
