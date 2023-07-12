@@ -1,6 +1,6 @@
 ﻿namespace MedicalQueueApi.Models
 {
-    public class Display
+    public class Device
     {
         public int Id { get; set; }
     }
