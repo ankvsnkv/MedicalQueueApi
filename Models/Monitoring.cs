@@ -6,7 +6,7 @@
         public DateTime dateTimeEvent { get; set; }     // Дата времени регистрации события
         public bool typeEvent { get; set; }             // Тип события (успешно/не успешно)
 
-        public Device? Device { get; set; }             // Ссылка на монитор
-        public int DeviceId { get; set; }
+        public Display? Display { get; set; }             // Ссылка на монитор
+        public int DisplayId { get; set; }
     }
 }
