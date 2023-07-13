@@ -12,12 +12,14 @@ namespace MedicalQueueApi.Controllers
     [Route("api/[controller]")]
     [EnableCors("CorsAllowAny")]
 
-    public class PagesController : ControllerBase {
+    public class PagesController : ControllerBase
+    {
         private ApplicationContext db;
 
         const string NO_PAGES = "По данному типу страницы нет ни одной записи.";
 
-        public PagesController(ApplicationContext context) {
+        public PagesController(ApplicationContext context)
+        {
             db = context;
         }
 
@@ -28,11 +30,12 @@ namespace MedicalQueueApi.Controllers
         //// http-заголовок с выданным ранее jwt-токеном 
         //// Формат: Authorization : Bearer TOKEN
         [HttpGet("list")]
-        [Authorize]
-        public IActionResult GetList([FromQuery] string typePage) {
+        //[Authorize]
+        public IActionResult GetList([FromQuery] string? typePage)
+        {
             // Получение списка страниц из БД с отбором по типу
             var entries = db.Pages.Include(x => x.TypePage).
-                Include(x => x.Display).Where(x => x.TypePage.Name == typePage);
+                Include(x => x.Display).Where(x => x.TypePage != null && x.TypePage.Name == typePage || typePage == null);
             // Проверка наличия хотя бы 1 записи
             if (entries.Count() == 0)
                 return NotFound(NO_PAGES);

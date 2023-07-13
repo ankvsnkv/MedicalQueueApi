@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MedicalQueueApi.Migrations
 {
-    public partial class init : Migration
+    public partial class add_model_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,15 +26,19 @@ namespace MedicalQueueApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Display",
+                name: "ColorSchemes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CssFileProperty = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Display", x => x.Id);
+                    table.PrimaryKey("PK_ColorSchemes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,6 +53,48 @@ namespace MedicalQueueApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TypePages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Displays",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ColorSchemeId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Displays", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Displays_ColorSchemes_ColorSchemeId",
+                        column: x => x.ColorSchemeId,
+                        principalTable: "ColorSchemes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MonitoringData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DateTimeEvent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TypeEvent = table.Column<bool>(type: "boolean", nullable: false),
+                    DisplayId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MonitoringData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MonitoringData_Displays_DisplayId",
+                        column: x => x.DisplayId,
+                        principalTable: "Displays",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,9 +113,9 @@ namespace MedicalQueueApi.Migrations
                 {
                     table.PrimaryKey("PK_Pages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pages_Display_DisplayId",
+                        name: "FK_Pages_Displays_DisplayId",
                         column: x => x.DisplayId,
-                        principalTable: "Display",
+                        principalTable: "Displays",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Pages_TypePages_TypePageId",
@@ -78,6 +124,16 @@ namespace MedicalQueueApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Displays_ColorSchemeId",
+                table: "Displays",
+                column: "ColorSchemeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MonitoringData_DisplayId",
+                table: "MonitoringData",
+                column: "DisplayId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pages_DisplayId",
@@ -96,13 +152,19 @@ namespace MedicalQueueApi.Migrations
                 name: "Administrators");
 
             migrationBuilder.DropTable(
+                name: "MonitoringData");
+
+            migrationBuilder.DropTable(
                 name: "Pages");
 
             migrationBuilder.DropTable(
-                name: "Display");
+                name: "Displays");
 
             migrationBuilder.DropTable(
                 name: "TypePages");
+
+            migrationBuilder.DropTable(
+                name: "ColorSchemes");
         }
     }
 }
