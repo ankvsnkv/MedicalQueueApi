@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MedicalQueueApi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230712103117_init")]
-    partial class init
+    [Migration("20230713212529_add_model_migration")]
+    partial class add_model_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,34 @@ namespace MedicalQueueApi.Migrations
                     b.ToTable("Administrators");
                 });
 
+            modelBuilder.Entity("MedicalQueueApi.Models.ColorScheme", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CssFileProperty")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ColorSchemes");
+                });
+
             modelBuilder.Entity("MedicalQueueApi.Models.Display", b =>
                 {
                     b.Property<int>("Id")
@@ -56,9 +84,46 @@ namespace MedicalQueueApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ColorSchemeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Display");
+                    b.HasIndex("ColorSchemeId");
+
+                    b.ToTable("Displays");
+                });
+
+            modelBuilder.Entity("MedicalQueueApi.Models.Monitoring", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateTimeEvent")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DisplayId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("TypeEvent")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisplayId");
+
+                    b.ToTable("MonitoringData");
                 });
 
             modelBuilder.Entity("MedicalQueueApi.Models.Page", b =>
@@ -112,6 +177,28 @@ namespace MedicalQueueApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TypePages");
+                });
+
+            modelBuilder.Entity("MedicalQueueApi.Models.Display", b =>
+                {
+                    b.HasOne("MedicalQueueApi.Models.ColorScheme", "ColorScheme")
+                        .WithMany()
+                        .HasForeignKey("ColorSchemeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ColorScheme");
+                });
+
+            modelBuilder.Entity("MedicalQueueApi.Models.Monitoring", b =>
+                {
+                    b.HasOne("MedicalQueueApi.Models.Display", "Display")
+                        .WithMany()
+                        .HasForeignKey("DisplayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Display");
                 });
 
             modelBuilder.Entity("MedicalQueueApi.Models.Page", b =>

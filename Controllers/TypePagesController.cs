@@ -28,7 +28,7 @@ namespace MedicalQueueApi.Controllers
         //// http-заголовок с выданным ранее jwt-токеном 
         //// Формат: Authorization : Bearer TOKEN
         [HttpGet("list")]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetTypePagesList()
         {
             // Получение списка типов страниц из БД

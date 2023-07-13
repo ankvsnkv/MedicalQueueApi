@@ -33,10 +33,10 @@ namespace MedicalQueueApi.Controllers
         //// Формат: Authorization : Bearer TOKEN
         [HttpGet]
         //[Authorize]
-        public IActionResult SearchScheme([FromQuery] string schemeName)
+        public IActionResult SearchScheme([FromQuery] string? schemeName="")
         {
             // Получение конкретной цветовй схемы из БД с отбором по Имени
-            var entry = db.ColorSchemes.FirstOrDefault(x => x.Name == schemeName);
+            var entry = db.ColorSchemes.FirstOrDefault(x => x.Name.Contains(schemeName??""));
             // Проверка наличия хотя бы 1 записи
             if (entry == null)
                 return NotFound(NOT_SCHEME);
